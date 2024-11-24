@@ -8,14 +8,12 @@ use App\Managers\ScrapeJobManager;
 use App\Services\WebScraperService;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 
 class ScrapeJob implements ShouldQueue
 {
     use Queueable;
-    use Dispatchable;
 
     /**
      * @param string $id
@@ -40,6 +38,7 @@ class ScrapeJob implements ShouldQueue
             Log::error('Failed scraping the urls', [
                 'error' => $exception->getMessage(),
                 'data'  => $this->DTO,
+                'id'    => $this->id,
             ]);
             $status = Job::STATUS_FAILED;
         }

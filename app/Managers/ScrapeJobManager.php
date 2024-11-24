@@ -42,7 +42,8 @@ class ScrapeJobManager
      */
     public function store(Job $job): Job
     {
-        $this->storage->store($job['id'], Arr::except($job->jsonSerialize(), ['id']));
+        $jobData = $job->jsonSerialize();
+        $this->storage->store($jobData['id'], Arr::except($jobData, ['id']));
         return $job;
     }
 
@@ -57,7 +58,11 @@ class ScrapeJobManager
         if (!$data) {
             return null;
         }
-        return new Job($data + ['id' => $id]);
+        return new Job([
+            'id' => $id,
+            'status' => $data['status'],
+            'data' => collect($data['data'])
+        ]);
     }
 
     /**

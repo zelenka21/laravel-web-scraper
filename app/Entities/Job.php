@@ -14,7 +14,7 @@ class Job implements JsonSerializable
 
     private string $id;
     private string $status;
-    private Collection $data;
+    private ?Collection $data;
 
     /**
      * @param array $data

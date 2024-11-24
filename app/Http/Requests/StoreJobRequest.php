@@ -34,7 +34,7 @@ class StoreJobRequest extends FormRequest
      */
     public function toDTO(): ScrapingDTO
     {
-        $urlDetails = collect($this->validated()['jobs'])->map(function ($job) {
+        $urlDetails = collect($this->validated()['data'])->map(function ($job) {
             return new UrlDetailsDTO(
                 $job['url'],
                 $job['selectors']
