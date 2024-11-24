@@ -1,5 +1,6 @@
 # Laravel Web Scraper 
 
+Simple web scraper, with support for HTML/CSS selectors. Using Redis as the data store and queue driver.
 ### Machine Requirements
 
 Docker, docker-compose.
@@ -12,14 +13,14 @@ Docker, docker-compose.
 
 ## Available commands
 
-* `make start` start the containers
-* `make stop` stop the containers
-* `make exec-php` enter the php container
+* `make start` start the containers.
+* `make stop` stop the containers.
+* `make exec-php` enter the php container to execute commands, run composer etc.
 
 ## Available endpoints
 
 ## 1. Create a Job
-- **Endpoint**: `POST /api/jobs`
+- **Endpoint**: `POST http://localhost:8000/api/jobs`
 - **Request Body**:
   ```json
   {
@@ -28,7 +29,8 @@ Docker, docker-compose.
               "url": "https://www.reiz.tech",
               "selectors": [
                   "#comp-lodvaza82__item-lk57oqib",
-                  "h1"
+                  "h1",
+                  "main > section > div"
               ]
           },
           {
@@ -41,8 +43,8 @@ Docker, docker-compose.
       ]
   }
 ## 2. Get job details
-- **Endpoint**: `GET /api/jobs/{id}`
+- **Endpoint**: `GET http://localhost:8000/api/jobs/{id}`
 
 ## 3. Delete a job
-- **Endpoint**: `DELETE /api/jobs/{id}`
+- **Endpoint**: `DELETE http://localhost:8000/api/jobs/{id}`
 

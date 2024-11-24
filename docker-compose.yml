@@ -19,6 +19,8 @@ services:
         container_name: laravel_redis
         networks:
             - laravel_network
+        volumes:
+            - redis_data:/data
 
     worker:
         build:
@@ -37,3 +39,5 @@ services:
 networks:
     laravel_network:
         driver: bridge
+volumes:
+    redis_data:
