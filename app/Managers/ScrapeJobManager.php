@@ -6,6 +6,7 @@ use App\Contracts\JobStorageInterface;
 use App\DTOs\ScrapingDTO;
 use App\Entities\Job;
 use App\Jobs\ScrapeJob;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class ScrapeJobManager
@@ -33,6 +34,16 @@ class ScrapeJobManager
 
         ScrapeJob::dispatch($id, $DTO);
         return $id;
+    }
+
+    /**
+     * @param Job $job
+     * @return Job
+     */
+    public function store(Job $job): Job
+    {
+        $this->storage->store($job['id'], Arr::except($job->jsonSerialize(), ['id']));
+        return $job;
     }
 
     /**

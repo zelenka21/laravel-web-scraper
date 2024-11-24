@@ -33,7 +33,8 @@ class JobController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        return response()->json(['id' => $this->manager->get($id)]); //todo resource
+        $job = $this->manager->get($id);
+        return response()->json($job, $job ? HTTPResponse::HTTP_OK : HTTPResponse::HTTP_NOT_FOUND);
     }
 
     /**

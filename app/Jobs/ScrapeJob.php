@@ -4,12 +4,13 @@ namespace App\Jobs;
 
 use App\DTOs\ScrapingDTO;
 use App\Entities\Job;
+use App\Managers\ScrapeJobManager;
 use App\Services\WebScraperService;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Log;
 
 class ScrapeJob implements ShouldQueue
 {
@@ -26,19 +27,26 @@ class ScrapeJob implements ShouldQueue
 
     /**
      * @param WebScraperService $scraperService
+     * @param ScrapeJobManager $jobManager
      * @return void
      */
-    public function handle(WebScraperService $scraperService): void
+    public function handle(WebScraperService $scraperService, ScrapeJobManager $jobManager): void
     {
         $status = Job::STATUS_COMPLETED;
+        $scrapeResult = collect();
         try {
             $scrapeResult = $scraperService->getData($this->DTO);
         } catch (Exception $exception) {
-            $status = "failed";
+            Log::error('Failed scraping the urls', [
+                'error' => $exception->getMessage(),
+                'data'  => $this->DTO,
+            ]);
+            $status = Job::STATUS_FAILED;
         }
-        Redis::set($this->id, json_encode([
+        $jobManager->store(new Job([
+            'id'     => $this->id,
             'status' => $status,
-            'data'   => $scrapeResult
+            'data'   => $scrapeResult,
         ]));
     }
 }

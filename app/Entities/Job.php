@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use Illuminate\Support\Collection;
 use JsonSerializable;
 
 class Job implements JsonSerializable
@@ -13,7 +14,7 @@ class Job implements JsonSerializable
 
     private string $id;
     private string $status;
-    private string $data;
+    private Collection $data;
 
     /**
      * @param array $data

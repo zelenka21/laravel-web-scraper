@@ -3,25 +3,44 @@
 namespace App\Http\Requests;
 
 use App\DTOs\ScrapingDTO;
+use App\DTOs\UrlDetailsDTO;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreJobRequest extends FormRequest
 {
+    /**
+     * @return bool
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @return array[]
+     */
     public function rules(): array
     {
         return [
-            'urls'        => ['required', 'array', 'min:1'],
-            'urls.*'      => ['url'],
-            'selectors'   => ['required', 'array', 'min:1'],
-            'selectors.*' => ['string']
+            'data'               => ['required', 'array', 'min:1'],
+            'data.*.url'         => ['required', 'url'],
+            'data.*.selectors'   => ['required', 'array', 'min:1'],
+            'data.*.selectors.*' => ['required', 'string']
         ];
     }
 
+    /**
+     * @return ScrapingDTO
+     */
     public function toDTO(): ScrapingDTO
     {
-        return new ScrapingDTO(
-            $this->validated()['urls'],
-            $this->validated()['selectors'],
-        );
+        $urlDetails = collect($this->validated()['jobs'])->map(function ($job) {
+            return new UrlDetailsDTO(
+                $job['url'],
+                $job['selectors']
+            );
+        })->toArray();
+
+        return new ScrapingDTO($urlDetails);
     }
 }

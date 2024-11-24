@@ -5,28 +5,18 @@ namespace App\DTOs;
 class ScrapingDTO
 {
     /**
-     * @param array $urls
-     * @param array $selectors
+     * @param UrlDetailsDTO[] $urls
      */
     public function __construct(
         private readonly array $urls,
-        private readonly array $selectors,
     ) {
     }
 
     /**
-     * @return array
+     * @return UrlDetailsDTO[]
      */
     public function getUrls(): array
     {
         return $this->urls;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSelectors(): array
-    {
-        return $this->selectors;
     }
 }
