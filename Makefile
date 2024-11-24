@@ -19,3 +19,5 @@ ifeq (,$(wildcard ./vendor/))
 else
 	echo "Composer already installed"
 endif
+exec-php:
+	$(DOCKER_APP_EXEC) sh
